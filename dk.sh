@@ -76,13 +76,14 @@ function jellyfin() {
 }
 
 function driveos() {
+    # local version=6.0.8.0-0003
+    local version=6.0.9.0-0007
     docker run -itd \
-        --rm \
         --privileged \
         --net=host \
         -v /dev/bus/usb:/dev/bus/usb \
         -v /home/${USER}:/home/nvidia/ \
-        nvcr.io/drive-coral/driveos-pdk/drive-agx-orin-linux-aarch64-pdk-build-x86:6.0.8.0-0003
+        nvcr.io/drive-coral/driveos-pdk/drive-agx-orin-linux-aarch64-pdk-build-x86:${version}
 }
 
 function portainer() {
@@ -132,6 +133,16 @@ function gitea() {
     echo "http://localhost:3000"
 }
 
+function rti() {
+    docker run \
+        -d \
+        --name rti \
+        --network host \
+        -v /home/${USER}/Workspace:/home/${USER}/Workspace \
+        rti_dev:7.2.0
+    echo "rti is running"
+}
+
 function help() {
     echo "Usage: $0 [options]"
     echo "Options:"
@@ -145,6 +156,7 @@ function help() {
     echo "  --heimdall     Run heimdall"
     echo "  --artifacts    Run artifactory"
     echo "  --gitea        Run gitea"
+    echo "  --rti          Run rti"
     
 }
 
@@ -180,6 +192,10 @@ while [[ $# -gt 0 ]]; do
         ;;
     --heimdall)
         heimdall
+        shift
+        ;;
+    --rti)
+        rti
         shift
         ;;
     *)
