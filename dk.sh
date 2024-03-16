@@ -59,7 +59,7 @@ function qinglong() {
 
     echo "qinglong is running"
     echo "http://localhost:5700"
-    ehco "config repo https://github.com/6dylan6/jdpro"
+    echo "config repo https://github.com/6dylan6/jdpro"
     # echo "ql repo https://github.com/6dylan6/jdpro.git "jd_|jx_|jddj_" "backUp" "^jd[^_]|USER|JD|function|sendNotify""
 }
 
