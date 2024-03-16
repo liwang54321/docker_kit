@@ -81,7 +81,7 @@ function driveos() {
     # local version=6.0.8.0-0003
     local version=6.0.9.0-0007
     docker run -itd \
-	    --name ${version} \
+	--name driveos_${version} \
         --privileged \
         --net=host \
         -v /dev/bus/usb:/dev/bus/usb \
