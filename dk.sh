@@ -60,6 +60,8 @@ function qinglong() {
     echo "qinglong is running"
     echo "http://localhost:5700"
     echo "config repo https://github.com/6dylan6/jdpro"
+    echo "add node.js deps: date-fns ds jsdom crypto-js axios, python: requests "
+    echo "add env: JD_COOKIE, DY_WASHBEANS=true, DPLH_ADDCAR=true, DPLH_BSHOP=true"
     # echo "ql repo https://github.com/6dylan6/jdpro.git "jd_|jx_|jddj_" "backUp" "^jd[^_]|USER|JD|function|sendNotify""
 }
 
