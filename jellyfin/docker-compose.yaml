@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   jellyfin:
-    image: jellyfin/jellyfin
+    image: jellyfin/jellyfin:2024072905
     container_name: jellyfin
     user: ${USER_ID}:${GROUP_ID}
     network_mode: 'host'

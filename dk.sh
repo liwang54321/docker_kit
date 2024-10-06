@@ -152,6 +152,21 @@ function rti() {
     echo "rti is running"
 }
 
+function filebrowser(){
+    # -v ${top_dir}/filebrowser/filebrowser.db:/database/filebrowser.db \
+    # -v ${top_dir}/filebrowser/settings.json:/config/settings.json \
+    mkdir -p ${top_dir}/filebrowser/root
+    docker run \
+    -d \
+    -v /home/${USER}/Workspace:/srv \
+    -v ${top_dir}/filebrowser/database:/database \
+    -v ${top_dir}/filebrowser/config:/config \
+    -e PUID=$(id -u) \
+    -e PGID=$(id -g) \
+    -p 8080:80 \
+    filebrowser/filebrowser
+}
+
 function help() {
     echo "Usage: $0 [options]"
     echo "Options:"
@@ -166,6 +181,7 @@ function help() {
     echo "  --artifacts    Run artifactory"
     echo "  --gitea        Run gitea"
     echo "  --rti          Run rti"
+    echo "  --filebrowser  Run filebrowser"
     
 }
 
@@ -205,6 +221,10 @@ while [[ $# -gt 0 ]]; do
         ;;
     --rti)
         rti
+        shift
+        ;;
+    --filebrowser)
+        filebrowser
         shift
         ;;
     *)
