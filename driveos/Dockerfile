@@ -81,9 +81,9 @@ RUN sudo apt update && \
     sudo apt update && \
     sudo apt install cmake -y && \
     cmake --version && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    sudo apt-get autoremove -y && \
+    sudo apt-get clean && \
+    sudo rm -rf /var/lib/apt/lists/*
 
 # python
 RUN pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && \
