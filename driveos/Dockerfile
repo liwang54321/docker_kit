@@ -95,51 +95,54 @@ RUN pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && 
 SHELL ["/bin/fish", "-c"]
 RUN curl https://gitee.com/mirrors/oh-my-fish/raw/master/bin/install | fish
 
+SHELL ["/bin/bash", "-c"]
 ARG VERSION=6.0.12.1
 ARG GCID=39950037
 ARG SDK=
 ARG OS
-ARG RELEASE
-ARG CUDA_VERSION
+ARG RELEASE=
+ARG CUDA_VERSION=11.4.30
 ARG DRIVER_VERSION
 ARG filename
-ARG CUDNN_VERSION
-ARG ea_ga=
-ARG BUILD_DATE
+ARG CUDNN_VERSION=8.9.2.19_1.0-1
+ARG TRT_RELEASE=8.6.15.19
+ARG ea_ga=ga
+ARG BUILD_DATE=20240919_1-1
 
-
-RUN sudo dpkg -i ./nv-driveos-repo-sdk-linux-[VERSION]-[GCID]_[VERSION]_amd64.deb && \
-    sudo -E apt -f -y install nv-driveos-build-[SDK]-[OS]-[RELEASE]-[GCID] && \
+COPY ./files/*.deb /tmp
+RUN cd /tmp && \
+    sudo dpkg -i ./nv-driveos-repo-pdk-linux-${VERSION}-${GCID}_${VERSION}_amd64.deb && \
+    sudo -E apt -f -y install nv-driveos-build-${SDK}-${OS}-${RELEASE}-${GCID} && \
     sudo apt update && \
     sudo apt upgrade -y && \
-    sudo dpkg -i ./cuda-repo-ubuntu2004-11-4-local_[CUDA-VERSION]-[DRIVER-VERSION]-1_amd64.deb && \
+    sudo dpkg -i ./cuda-repo-ubuntu2004-11-4-local_${CUDA_VERSION}-${DRIVER_VERSION}-1_amd64.deb && \
     sudo cp /var/cuda-repo*/cuda*keyring.gpg /usr/share/keyrings/ && \
-    sudo apt-key add /var/cuda-repo-ubuntu2004-11-4-local/[filename].pub && \
-    sudo dpkg -i ./cuda-repo-cross-aarch64-ubuntu2004-11-4-local_[CUDA-VERSION]-1_all.deb && \
+    sudo apt-key add /var/cuda-repo-ubuntu2004-11-4-local/${filename}.pub && \
+    sudo dpkg -i ./cuda-repo-cross-aarch64-ubuntu2004-11-4-local_${CUDA_VERSION}-1_all.deb && \
     sudo cp /var/cuda-repo*/cuda*keyring.gpg /usr/share/keyrings/ && \
-    sudo apt-key add /var/cuda-repo-cross-aarch64-ubuntu2004-11-4-local/[filename].pub && \
+    sudo apt-key add /var/cuda-repo-cross-aarch64-ubuntu2004-11-4-local/${filename}.pub && \
     sudo apt update && \
     sudo apt -y install cuda-toolkit-11-4 -y && \
     sudo apt -y install cuda-cross-aarch64-11-4 -y && \
     sudo rm /var/lib/apt/lists/_var_cuda* && \
     sudo apt --fix-broken install -y && \
     sudo apt autoremove -y && \
-    sudo apt install ./cudnn-local-repo-ubuntu2004-[CUDNN-VERSION].deb && \
+    sudo apt install ./cudnn-local-repo-ubuntu2004-${CUDNN_VERSION}.deb && \
     sudo cp /var/cudnn*/cudnn*keyring.gpg /usr/share/keyrings/ && \
-    sudo apt-key add /var/cudnn-local-repo-ubuntu2004-[CUDNN-VERSION]/[filename].pub && \
+    sudo apt-key add /var/cudnn-local-repo-ubuntu2004-${CUDNN_VERSION}/${filename}.pub && \
     sudo apt update && \
     sudo apt install libcudnn8 -y && \
     sudo apt install libcudnn8-dev -y && \
     sudo apt install libcudnn8-samples -y && \
-    sudo apt install ./cudnn-local-repo-cross-aarch64-ubuntu2004-[CUDNN-VERSION].deb && \
-    sudo apt-key add /var/cudnn-local-repo-cross-aarch64-ubuntu2004-[CUDNN-VERSION]/[filename].pub && \
+    sudo apt install ./cudnn-local-repo-cross-aarch64-ubuntu2004-${CUDNN_VERSION}.deb && \
+    sudo apt-key add /var/cudnn-local-repo-cross-aarch64-ubuntu2004-${CUDNN_VERSION}/${filename}.pub && \
     sudo apt update && \
     sudo apt install libcudnn8-cross-aarch64 -y && \
-    sudo dpkg -i nv-tensorrt-repo-ubuntu2004-cuda11.4-trt[RELEASE]-x86-host-[ea | ga]-[BUILD-DATE]_1-1_amd64.deb && \
-    sudo apt-key add /var/nv-tensorrt-repo-ubuntu2004-cuda11.4-trt[RELEASE]-x86-host-[ea | ga]-[BUILD-DATE]/[filename].pub && \
+    sudo dpkg -i nv-tensorrt-repo-ubuntu2004-cuda11.4-trt${TRT_RELEASE}-x86-host-${ea_ga}-${BUILD_DATE}_1-1_amd64.deb && \
+    sudo apt-key add /var/nv-tensorrt-repo-ubuntu2004-cuda11.4-trt${TRT_RELEASE}-x86-host-${ea_ga}-${BUILD_DATE}/${filename}.pub && \
     sudo apt update && \
     sudo apt install tensorrt -y && \
-    sudo dpkg -i nv-tensorrt-repo-ubuntu2004-cuda11.4-trt[RELEASE]-d6l-cross-ga-20221229_1-1_amd64.deb && \
+    sudo dpkg -i nv-tensorrt-repo-ubuntu2004-cuda11.4-trt${TRT_RELEASE}-d6l-cross-ga-20221229_1-1_amd64.deb && \
     sudo apt-get install tensorrt-cross-aarch64 -y
 
 
