@@ -8,7 +8,7 @@ top_dir=$(
 function driveos() {
     pushd ${top_dir}/driveos > /dev/null 2>&1 
     driveos_version="6.0.12.1"
-    if [ ${http_proxy} != "" ]; then 
+    if [[ ${http_proxy} != "" ]]; then 
         export proxy="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy}"
     fi
     docker build --network=host ${proxy} -t driveos:${driveos_version} .

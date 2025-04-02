@@ -38,6 +38,25 @@ function install_docker() {
     fi
 }
 
+function install_nvidia_docker() {
+    curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+    sudo apt-get update
+    sudo apt-get install -y nvidia-container-toolkit
+}
+
+function jetpack() {
+    docker run -it --rm --net=host \
+        --runtime nvidia \
+        -e DISPLAY=$DISPLAY \
+        -v /tmp/.X11-unix/:/tmp/.X11-unix \
+        -v /home/lw:/home/lw \
+        nvcr.io/nvidia/l4t-jetpack:r35.3.1
+}
+
 function v2raya() {
     # run v2raya
     docker run -d \
@@ -171,7 +190,8 @@ function help() {
     echo "Usage: $0 [options]"
     echo "Options:"
     echo "  -h, --help     Show this help message and exit"
-    echo "  -i, --install  Install docker"
+    echo "  -i, --install                Install docker"
+    echo "  -in, --install_nvidia_docker  Install nvidia docker"
     echo "  --v2raya       Run v2raya"
     echo "  --jellyfin     Run jellyfin"
     echo "  --qinglong     Run qinglong"
@@ -182,7 +202,7 @@ function help() {
     echo "  --gitea        Run gitea"
     echo "  --rti          Run rti"
     echo "  --filebrowser  Run filebrowser"
-    
+    echo "  --jetpack      Run jetpack"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -193,6 +213,10 @@ while [[ $# -gt 0 ]]; do
         ;;
     -i | install_docker)
         install_docker
+        exit 0
+        ;;
+    -in | install_nvidia_docker)
+        install_nvidia_docker
         exit 0
         ;;
     --v2raya)
@@ -225,6 +249,10 @@ while [[ $# -gt 0 ]]; do
         ;;
     --filebrowser)
         filebrowser
+        shift
+        ;;
+    --jetpack)
+        jetpack
         shift
         ;;
     *)
