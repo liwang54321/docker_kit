@@ -98,8 +98,8 @@ RUN curl https://gitee.com/mirrors/oh-my-fish/raw/master/bin/install | fish
 SHELL ["/bin/bash", "-c"]
 ARG VERSION=6.0.12.1
 ARG GCID=39950037
-ARG SDK=
-ARG OS
+ARG SDK=pdk
+ARG OS=linux
 ARG RELEASE=
 ARG CUDA_VERSION=11.4.30
 ARG DRIVER_VERSION
@@ -109,11 +109,12 @@ ARG TRT_RELEASE=8.6.15.19
 ARG ea_ga=ga
 ARG BUILD_DATE=20240919_1-1
 
-COPY ./files/*.deb /tmp
+COPY ./files/*.deb /tmp/
 RUN cd /tmp && \
+    mkdir -p /drive && \
     sudo dpkg -i ./nv-driveos-repo-pdk-linux-${VERSION}-${GCID}_${VERSION}_amd64.deb && \
-    sudo -E apt -f -y install nv-driveos-build-${SDK}-${OS}-${RELEASE}-${GCID} && \
     sudo apt update && \
+    sudo -E apt -f -y install nv-driveos-build-${SDK}-${OS}-${RELEASE}-${GCID} && \
     sudo apt upgrade -y && \
     sudo dpkg -i ./cuda-repo-ubuntu2004-11-4-local_${CUDA_VERSION}-${DRIVER_VERSION}-1_amd64.deb && \
     sudo cp /var/cuda-repo*/cuda*keyring.gpg /usr/share/keyrings/ && \
