@@ -66,6 +66,58 @@ function jetpack_cross(){
          nvcr.io/nvidia/jetpack-linux-aarch64-crosscompile-x86:6.1
 }
 
+# https://catalog.ngc.nvidia.com/orgs/nvidia/containers/isaac-sim
+function isaac-sim()
+{
+    docker run --name isaac-sim --entrypoint bash -it --runtime=nvidia --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
+        -e "PRIVACY_CONSENT=Y" \
+        -v /home/lw/:/home/lw \
+        -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
+        -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
+        -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
+        -v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
+        -v ~/docker/isaac-sim/cache/asset_browser:/isaac-sim/exts/isaacsim.asset.browser/cache:rw \
+        -v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
+        -v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
+        -v ~/docker/isaac-sim/pkg:/root/.local/share/ov/pkg:rw \
+        -v ~/docker/isaac-sim/documents:/root/Documents:rw \
+        nvcr.io/nvidia/isaac-sim:4.5.0
+}
+
+# https://catalog.ngc.nvidia.com/orgs/nvidia/teams/isaac/containers/ros/tags
+function isaac_dev() {
+    docker run --name isaac-sim --entrypoint bash -it --runtime=nvidia --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
+        -e "PRIVACY_CONSENT=Y" \
+        -v /home/lw/:/home/lw \
+        -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
+        -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
+        -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
+        -v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
+        -v ~/docker/isaac-sim/cache/asset_browser:/isaac-sim/exts/isaacsim.asset.browser/cache:rw \
+        -v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
+        -v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
+        -v ~/docker/isaac-sim/pkg:/root/.local/share/ov/pkg:rw \
+        -v ~/docker/isaac-sim/documents:/root/Documents:rw \
+        nvcr.io/nvidia/isaac/ros:x86_64-ros2_humble_79152baed139e9f4258734f3056c263a
+}
+
+# https://catalog.ngc.nvidia.com/orgs/nvidia/containers/isaac-lab/tags
+function isaac_lab() {
+    docker run --name isaac-sim --entrypoint bash -it --runtime=nvidia --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
+        -e "PRIVACY_CONSENT=Y" \
+        -v /home/lw/:/home/lw \
+        -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
+        -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
+        -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
+        -v ~/docker/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw \
+        -v ~/docker/isaac-sim/cache/asset_browser:/isaac-sim/exts/isaacsim.asset.browser/cache:rw \
+        -v ~/docker/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw \
+        -v ~/docker/isaac-sim/data:/root/.local/share/ov/data:rw \
+        -v ~/docker/isaac-sim/pkg:/root/.local/share/ov/pkg:rw \
+        -v ~/docker/isaac-sim/documents:/root/Documents:rw \
+        nvcr.io/nvidia/isaac-lab:2.0.2
+}
+
 function v2raya() {
     # run v2raya
     docker run -d \
