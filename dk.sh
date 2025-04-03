@@ -48,6 +48,7 @@ function install_nvidia_docker() {
     sudo apt-get install -y nvidia-container-toolkit
 }
 
+# https://catalog.ngc.nvidia.com/orgs/nvidia/containers/l4t-jetpack
 function jetpack() {
     docker run -it --rm --net=host \
         --runtime nvidia \
@@ -55,6 +56,14 @@ function jetpack() {
         -v /tmp/.X11-unix/:/tmp/.X11-unix \
         -v /home/lw:/home/lw \
         nvcr.io/nvidia/l4t-jetpack:r35.3.1
+}
+
+# https://catalog.ngc.nvidia.com/orgs/nvidia/containers/jetpack-linux-aarch64-crosscompile-x86
+function jetpack_cross(){
+    docker run -it --privileged --net=host \
+        -v /dev/bus/usb:/dev/bus/usb \
+        -v /home/lw/:/home/lw \
+         nvcr.io/nvidia/jetpack-linux-aarch64-crosscompile-x86:6.1
 }
 
 function v2raya() {
