@@ -34,7 +34,7 @@ function install_docker() {
 
         sudo apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
         sudo systemctl restart docker
-        sudo usermod -aG docker ${USER}
+        sudo usermod -aG docker "${USER}"
     fi
 }
 
@@ -54,7 +54,7 @@ function jetpack() {
         --runtime nvidia \
         -e DISPLAY=$DISPLAY \
         -v /tmp/.X11-unix/:/tmp/.X11-unix \
-        -v /home/lw:/home/lw \
+        -v /home/"${USER}"/Workspace:/home/"${USER}"/Workspace \
         nvcr.io/nvidia/l4t-jetpack:r35.3.1
 }
 
@@ -62,7 +62,7 @@ function jetpack() {
 function jetpack_cross(){
     docker run -it --privileged --net=host \
         -v /dev/bus/usb:/dev/bus/usb \
-        -v /home/lw/:/home/lw \
+        -v /home/"${USER}"/Workspace/:/home/"${USER}"/Workspace \
          nvcr.io/nvidia/jetpack-linux-aarch64-crosscompile-x86:6.1
 }
 
@@ -71,7 +71,7 @@ function isaac-sim()
 {
     docker run --name isaac-sim --entrypoint bash -it --runtime=nvidia --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
         -e "PRIVACY_CONSENT=Y" \
-        -v /home/lw/:/home/lw \
+        -v /home/"${USER}"/Workspace:/home/"${USER}"/Workspace \
         -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
         -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
         -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
@@ -88,7 +88,7 @@ function isaac-sim()
 function isaac_dev() {
     docker run --name isaac-sim --entrypoint bash -it --runtime=nvidia --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
         -e "PRIVACY_CONSENT=Y" \
-        -v /home/lw/:/home/lw \
+        -v /home/"${USER}"/Workspace:/home/"${USER}"/Workspace \
         -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
         -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
         -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
@@ -105,7 +105,7 @@ function isaac_dev() {
 function isaac_lab() {
     docker run --name isaac-sim --entrypoint bash -it --runtime=nvidia --gpus all -e "ACCEPT_EULA=Y" --rm --network=host \
         -e "PRIVACY_CONSENT=Y" \
-        -v /home/lw/:/home/lw \
+        -v /home/"${USER}"/Workspace:/home/"${USER}"/Workspace \
         -v ~/docker/isaac-sim/cache/ov:/root/.cache/ov:rw \
         -v ~/docker/isaac-sim/cache/pip:/root/.cache/pip:rw \
         -v ~/docker/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw \
@@ -119,7 +119,6 @@ function isaac_lab() {
 }
 
 function v2raya() {
-    # run v2raya
     docker run -d \
         --restart=always \
         --privileged \
@@ -152,11 +151,11 @@ function qinglong() {
 }
 
 function jellyfin() {
-    pushd ${top_dir}/jellyfin >/dev/null 2>&1
-    mkdir -p ${top_dir}/jellyfin/config
-    mkdir -p ${top_dir}/jellyfin/cache
-    mkdir -p ${top_dir}/jellyfin/media
-    mkdir -p ${top_dir}/jellyfin/media2
+    pushd "${top_dir}"/jellyfin >/dev/null 2>&1
+    mkdir -p "${top_dir}"/jellyfin/config
+    mkdir -p "${top_dir}"/jellyfin/cache
+    mkdir -p "${top_dir}"/jellyfin/media
+    mkdir -p "${top_dir}"/jellyfin/media2
     USER_ID=$(id -u) GROUP_ID=$(id -g) docker compose up -d
     popd >/dev/null
     echo "jellyfin is running"
@@ -171,7 +170,7 @@ function driveos() {
         --privileged \
         --net=host \
         -v /dev/bus/usb:/dev/bus/usb \
-        -v /home/${USER}:/home/nvidia/ \
+        -v /home/${USER}/Workspace:/home/${USER}/Workspace \
         nvcr.io/drive-coral/driveos-pdk/drive-agx-orin-linux-aarch64-pdk-build-x86:${version}
 }
 
@@ -182,7 +181,7 @@ function portainer() {
         --name portainer \
         --restart=always \
         -v /var/run/docker.sock:/var/run/docker.sock \
-        -v ${top_dir}/portainer/data:/data \
+        -v "${top_dir}"/portainer/data:/data \
         portainer/portainer-ce:latest
     echo "portainer is running"
     echo "http://localhost:8000"
@@ -191,12 +190,12 @@ function portainer() {
 function heimdall() {
     docker run -d \
         --name=heimdall \
-        -e PUID=$(id -u) \
-        -e PGID=$(id -g) \
+        -e PUID="$(id -u)" \
+        -e PGID="$(id -g)" \
         -e TZ=Asia/Shanghai \
         -p 80:80 \
         -p 443:443 \
-        -v ${top_dir}/heimdall/config:/config \
+        -v "${top_dir}"/heimdall/config:/config \
         --restart unless-stopped \
         linuxserver/heimdall:latest
 }
@@ -227,7 +226,7 @@ function rti() {
         -d \
         --name rti \
         --network host \
-        -v /home/${USER}/Workspace:/home/${USER}/Workspace \
+        -v /home/"${USER}"/Workspace:/home/"${USER}"/Workspace \
         rti_dev:7.2.0
     echo "rti is running"
 }
@@ -238,9 +237,9 @@ function filebrowser(){
     mkdir -p ${top_dir}/filebrowser/root
     docker run \
     -d \
-    -v /home/${USER}/Workspace:/srv \
-    -v ${top_dir}/filebrowser/database:/database \
-    -v ${top_dir}/filebrowser/config:/config \
+    -v /home/"${USER}"/Workspace:/srv \
+    -v "${top_dir}"/filebrowser/database:/database \
+    -v "${top_dir}"/filebrowser/config:/config \
     -e PUID=$(id -u) \
     -e PGID=$(id -g) \
     -p 8080:80 \

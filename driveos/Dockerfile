@@ -97,7 +97,7 @@ RUN curl https://gitee.com/mirrors/oh-my-fish/raw/master/bin/install | fish
 
 SHELL ["/bin/bash", "-c"]
 
-COPY ./files/*.deb /tmp/
+# COPY ./files/*.deb /tmp/
 
 ARG VERSION=6.0.12.1
 ARG GCID=39950037
@@ -112,10 +112,10 @@ ARG filename_cudnn=FFDCDC6C
 ARG filename_cudnn_cross=E7EA4BEF
 ARG TRT_RELEASE=8.6.15.19
 ARG ea_ga=ga
-ARG BUILD_DATE=20240919_1-1
+ARG BUILD_DATE=20240919
 ARG filename_trt=71e1174e
 
-RUN cd /tmp && \
+RUN --mount=type=bind,target=/files,source=$PWD/files cd /files && \
     sudo mkdir -p /${NV_WORKSPACE} && \
     sudo chown ${user_name}:${user_name} /${NV_WORKSPACE} && \
     touch /${NV_WORKSPACE}/.nvlicense_${VERSION} && \
@@ -151,7 +151,7 @@ RUN cd /tmp && \
     sudo apt-key add /var/nv-tensorrt-repo-ubuntu2004-cuda11.4-trt${TRT_RELEASE}-x86-host-${ea_ga}-${BUILD_DATE}/${filename_trt}.pub && \
     sudo apt update && \
     sudo apt install tensorrt -y && \
-    sudo dpkg -i nv-tensorrt-repo-ubuntu2004-cuda11.4-trt${TRT_RELEASE}-d6l-cross-${ea_ga}-${BUILD_DATE}_amd64.deb && \
+    sudo dpkg -i nv-tensorrt-repo-ubuntu2004-cuda11.4-trt${TRT_RELEASE}-d6l-cross-${ea_ga}-${BUILD_DATE}_1-1_amd64.deb && \
     sudo apt update && \
     sudo apt-get install tensorrt-cross-aarch64 -y && \
     sudo apt install -y libglu1-mesa python3-jinja2 python3-jsonschema python3-numpy libdrm-dev libgl1-mesa-dev \
@@ -161,10 +161,10 @@ RUN cd /tmp && \
         python3-pygments python3-regex python3-tabulate python3-tk libqt5quick5 qml-module-qtquick-layouts \
         qml-module-qtquick2  qml-module-qtquick-window2 && \
     sudo dpkg -i ./driveworks* && \
-    sudo apt install -y libxcb-cursor0 && \
+    sudo apt install -y libxcb-cursor0 libxcb-icccm4-dev && \
     sudo dpkg -i ./NVIDIA_Nsight_Graphics_DRIVE_NDA_2024.2.24309.deb && \
     sudo dpkg -i ./NsightSystems-linux-nda-2024.7.2.98-3515348.deb && \
-    sudo apt update &&\
+    sudo apt upgrade -y &&\
     sudo apt autoremove -y && \
     sudo apt clean && \
     sudo rm -rf /var/lib/apt/lists/* && \

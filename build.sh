@@ -11,7 +11,8 @@ function driveos() {
     if [[ ${http_proxy} != "" ]]; then 
         export proxy="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy}"
     fi
-    DOCKER_BUILDKIT=0 docker build --network=host ${proxy} -t driveos:${driveos_version} .
+    # Debug Env "DOCKER_BUILDKIT=0"
+    docker build --network=host ${proxy} -t driveos:${driveos_version} .
     popd > /dev/null
 }
 
