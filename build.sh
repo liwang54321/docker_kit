@@ -7,11 +7,12 @@ top_dir=$(
 
 function driveos() {
     pushd ${top_dir}/driveos > /dev/null 2>&1 
+    echo "Download DriveOS deb files to driveos/file directory first"
     driveos_version="6.0.12.1"
     if [[ ${http_proxy} != "" ]]; then 
         export proxy="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy}"
     fi
-    # Debug Env "DOCKER_BUILDKIT=0"
+    # Debug export DOCKER_BUILDKIT=0
     docker build --network=host ${proxy} -t driveos:${driveos_version} .
     popd > /dev/null
 }
