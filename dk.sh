@@ -246,6 +246,20 @@ function filebrowser(){
     filebrowser/filebrowser
 }
 
+# https://rustdesk.com/zh-cn/
+# https://github.com/rustdesk/rustdesk
+function rustdesk() {
+    pushd ${top_dir}/rustdesk >/dev/null 2>&1
+    docker compose up -d
+    popd > /dev/null
+}
+
+function watchtower() {
+    pushd ${top_dir}/watchtower >/dev/null 2>&1
+    docker compose up -d
+    popd > /dev/null
+}
+
 function help() {
     echo "Usage: $0 [options]"
     echo "Options:"
@@ -263,6 +277,8 @@ function help() {
     echo "  --rti          Run rti"
     echo "  --filebrowser  Run filebrowser"
     echo "  --jetpack      Run jetpack"
+    echo "  --rustdesk     Run rustdesk"
+    echo "  --watchtower   Run watchtower"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -313,6 +329,14 @@ while [[ $# -gt 0 ]]; do
         ;;
     --jetpack)
         jetpack
+        shift
+        ;;
+    --rustdesk)
+        rustdesk
+        shift
+        ;;
+    --watchtower)
+        watchtower
         shift
         ;;
     *)
