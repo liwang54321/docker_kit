@@ -6,3 +6,6 @@
 /ql
 /filebrowser
 /driveos/files/*.deb
+rustdesk/data/db_v2.sqlite3
+rustdesk/data/db_v2.sqlite3-shm
+rustdesk/data/db_v2.sqlite3-wal
