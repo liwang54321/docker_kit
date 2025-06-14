@@ -158,6 +158,7 @@ function jellyfin() {
 
 function driveos() {
     # local version=6.0.8.0-0003
+    # with gui --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw"
     local version=6.0.9.0-0007
     docker run -itd \
 	--name driveos_${version} \
